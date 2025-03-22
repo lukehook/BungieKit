@@ -1,4 +1,5 @@
 // swift-tools-version:5.7
+// Requires Swift 5.7+ and Xcode 14.0+
 import PackageDescription
 
 let package = Package(
