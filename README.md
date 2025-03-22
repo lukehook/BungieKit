@@ -30,7 +30,8 @@ A Swift package for interacting with the Bungie.net API in Swift applications.
   - Destiny 2 reset time calculations
   - Helper methods for common operations
 
-> **Note:** BungieKit provides a strongly typed *interface* to the Bungie API (the structure of requests and responses), 
+> [!NOTE]
+> BungieKit provides a strongly typed *interface* to the Bungie API (the structure of requests and responses), 
 > while the actual game content data (items, activities, etc.) comes from the Destiny 2 manifest database and is accessed 
 > through this type-safe interface.
 
@@ -84,7 +85,7 @@ Before using BungieKit, you need to:
 
 ### Security Recommendations
 
-> **Warning**
+> [!WARNING]
 > 
 > API keys and OAuth credentials should be handled securely:
 > 
