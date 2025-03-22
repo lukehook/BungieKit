@@ -1,6 +1,47 @@
 import Foundation
 import OSLog
 
+/// Response from the Destiny 2 Manifest API
+public struct DestinyManifestResponse: Codable {
+    /// The version of the manifest
+    public let version: String
+    /// Mobile asset content paths by locale
+    public let mobileAssetContentPath: String
+    /// Mobile gear asset data bases by locale
+    public let mobileGearAssetDataBases: [GearAssetDataBaseDefinition]
+    /// Mobile world content paths by locale
+    public let mobileWorldContentPaths: [String: String]
+    /// JSON world content paths by locale
+    public let jsonWorldContentPaths: [String: String]
+    /// Content paths by locale
+    public let jsonWorldComponentContentPaths: [String: [String: String]]
+    
+    /// Gets the URL for the world content database for the given locale
+    /// - Parameter locale: The locale
+    /// - Returns: The URL
+    public func getWorldContentURL(locale: String = "en") -> URL? {
+        guard let path = mobileWorldContentPaths[locale] else {
+            return nil
+        }
+        
+        // If the path is a full URL, use it directly
+        if path.hasPrefix("http") {
+            return URL(string: path)
+        }
+        
+        // Otherwise, assume it's a relative path on the Bungie.net domain
+        return URL(string: "https://www.bungie.net\(path)")
+    }
+}
+
+/// Definition for a gear asset database
+public struct GearAssetDataBaseDefinition: Codable {
+    /// The version
+    public let version: Int
+    /// The path
+    public let path: String
+}
+
 /// Service for interacting with Destiny 2 API endpoints
 public class DestinyService {
     /// The API service for making requests
@@ -166,41 +207,6 @@ public class DestinyService {
         
         return results.member
     }
-}
-
-/// Response from the Destiny manifest endpoint
-public struct DestinyManifestResponse: Decodable {
-    /// The version of the manifest
-    public let version: String
-    /// Mobile asset content paths by locale
-    public let mobileAssetContentPath: String
-    /// Mobile gear asset data bases by locale
-    public let mobileGearAssetDataBases: [GearAssetDataBaseDefinition]
-    /// Mobile world content paths by locale
-    public let mobileWorldContentPaths: [String: String]
-    /// JSON world content paths by locale
-    public let jsonWorldContentPaths: [String: String]
-    /// Content paths by locale
-    public let jsonWorldComponentContentPaths: [String: [String: String]]
-    
-    /// Gets the URL for the world content database for the given locale
-    /// - Parameter locale: The locale
-    /// - Returns: The URL
-    public func getWorldContentURL(locale: String = "en") -> URL? {
-        guard let path = mobileWorldContentPaths[locale] else {
-            return nil
-        }
-        
-        return URL(string: "https://www.bungie.net\(path)")
-    }
-}
-
-/// Definition for a gear asset database
-public struct GearAssetDataBaseDefinition: Decodable {
-    /// The version
-    public let version: Int
-    /// The path
-    public let path: String
 }
 
 /// Response from the get profile endpoint

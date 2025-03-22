@@ -22,7 +22,7 @@ A Swift package for interacting with the Bungie.net API in Swift applications.
   - Stats and activities
 
 - **Manifest Management:**
-  - CoreData integration for efficient game database access
+  - GRDB integration for efficient game database access
   - Type-safe access to dynamic game content
   - Support for multiple languages and content versions
 

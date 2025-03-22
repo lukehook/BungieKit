@@ -246,9 +246,6 @@ public class GRDBManifestProvider: ManifestProvider {
         from url: URL,
         progressHandler: ((Double) -> Void)?
     ) async throws -> (URL, URLResponse) {
-        // Create a download request
-        let request = URLRequest(url: url)
-        
         // Create a temporary file URL
         let tempURL = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
@@ -281,13 +278,19 @@ public class GRDBManifestProvider: ManifestProvider {
         let archive = try Archive(url: zipURL, accessMode: .read)
         
         // Find the first entry in the archive (should be the SQLite file)
-        guard let entry = archive.first else {
+        var firstEntry: Entry? = nil
+        for entry in archive {
+            firstEntry = entry
+            break
+        }
+        
+        guard let entry = firstEntry else {
             throw ManifestError.importFailed
         }
         
         // Extract to the temporary directory
         let dbURL = extractionDir.appendingPathComponent("world_sql_content.db")
-        try archive.extract(entry, to: dbURL)
+        _ = try archive.extract(entry, to: dbURL)
         
         return dbURL
     }
@@ -305,23 +308,22 @@ public class GRDBManifestProvider: ManifestProvider {
         let sourceDB = try DatabaseQueue(path: fileURL.path)
         
         // Get the list of all tables in the source database that represent definitions
-        var definitionTables: [String] = []
-        try sourceDB.read { db in
+        let definitionTables = try await sourceDB.read { db -> [String] in
             // Query the SQLite master table to get all tables
             let tables = try String.fetchAll(db, sql: "SELECT name FROM sqlite_master WHERE type='table'")
             // Filter to include only definition tables
-            definitionTables = tables.filter { 
+            return tables.filter { 
                 return $0.hasPrefix("Destiny") && $0.hasSuffix("Definition") 
             }
         }
         
         // Start a transaction to import all data
-        try dbQueue.write { db in
+        try await dbQueue.write { db in
             // Delete existing version
             try db.execute(sql: "DELETE FROM manifest_version")
             
             // Insert new version
-            var versionRecord = ManifestVersionRecord(version: version)
+            let versionRecord = ManifestVersionRecord(version: version)
             try versionRecord.insert(db)
             
             // Process each definition table
