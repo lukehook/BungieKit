@@ -19,7 +19,10 @@ let package = Package(
             targets: ["BungieKitManifest"])
     ],
     dependencies: [
-        // No external dependencies
+        // Add GRDB dependency
+        .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.16.0"),
+        // Add ZIPFoundation for handling zip files
+        .package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.16")
     ],
     targets: [
         // Core BungieKit target
@@ -27,10 +30,14 @@ let package = Package(
             name: "BungieKit",
             dependencies: []),
         
-        // Manifest handling target that includes CoreData
+        // Manifest handling target with GRDB instead of CoreData
         .target(
             name: "BungieKitManifest",
-            dependencies: ["BungieKit"],
+            dependencies: [
+                "BungieKit", 
+                .product(name: "GRDB", package: "GRDB.swift"),
+                .product(name: "ZIPFoundation", package: "ZIPFoundation")
+            ],
             resources: [
                 .process("Resources")
             ]),

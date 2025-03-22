@@ -313,7 +313,7 @@ This approach not only addresses technical limitations but also complies with Bu
 import BungieKitManifest
 
 // Initialize manifest provider
-let manifestProvider = CoreDataManifestProvider()
+let manifestProvider = GRDBManifestProvider()
 
 // Complete manifest update workflow
 func updateManifestIfNeeded() async {
