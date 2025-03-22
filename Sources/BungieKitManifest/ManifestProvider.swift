@@ -36,7 +36,7 @@ public protocol ManifestProvider {
 /// Types of manifest definitions
 public enum DefinitionType: String, CaseIterable {
     case inventoryItem = "DestinyInventoryItemDefinition"
-    case class = "DestinyClassDefinition"
+    case `class` = "DestinyClassDefinition"
     case race = "DestinyRaceDefinition"
     case gender = "DestinyGenderDefinition"
     case activityMode = "DestinyActivityModeDefinition"
@@ -174,7 +174,7 @@ public class CoreDataManifestProvider: ManifestProvider {
         from url: URL,
         progressHandler: ((Double) -> Void)?
     ) async throws -> (URL, URLResponse) {
-        // Create download task with progress tracking
+        // Create a download request
         let request = URLRequest(url: url)
         
         // Create a temporary file URL
@@ -182,16 +182,14 @@ public class CoreDataManifestProvider: ManifestProvider {
             .appendingPathComponent(UUID().uuidString)
             .appendingPathExtension("tmp")
         
-        // Download with progress tracking
-        let (downloadURL, response) = try await session.download(for: request) { bytesWritten, totalBytes in
-            if totalBytes > 0 {
-                let progress = Double(bytesWritten) / Double(totalBytes)
-                progressHandler?(progress)
-            }
-        }
+        // Use the basic download API without progress tracking
+        let (downloadURL, response) = try await URLSession.shared.download(from: url)
         
         // Move the downloaded file to our temporary URL
         try FileManager.default.moveItem(at: downloadURL, to: tempURL)
+        
+        // Call progress handler with completion
+        progressHandler?(1.0)
         
         return (tempURL, response)
     }

@@ -106,7 +106,7 @@ public class DestinyService {
         return try await apiService.request(
             endpoint: "Destiny2/SearchDestinyPlayerByBungieName/",
             method: .post,
-            body: ["displayName": searchText, "displayNameCode": 0] as [String: Any],
+            body: ["displayName": searchText, "displayNameCode": "0"],
             queryItems: queryItems,
             accessToken: nil,
             responseType: [UserInfoCard].self
