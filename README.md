@@ -4,11 +4,35 @@ A Swift package for interacting with the Bungie.net API in Swift applications.
 
 ## Features
 
-- Strongly typed API client for Bungie.net endpoints
-- Built with Swift Concurrency (async/await)
-- Support for OAuth authentication
-- Manifest download and management with CoreData
-- Destiny 2 reset time calculations
+- **Strongly typed API wrapper:**
+  - Type-safe API requests and responses
+  - Proper Swift enums for all enumerated values
+  - Structured error types for robust error handling
+  - Swift-native protocols and type definitions
+
+- **Swift Concurrency:**
+  - Built with modern async/await pattern
+  - Task-based concurrency for efficient network operations
+  - Proper async error handling
+
+- **Complete API Coverage:**
+  - OAuth authentication flow
+  - Player profile and inventory data
+  - Game content definitions
+  - Stats and activities
+
+- **Manifest Management:**
+  - CoreData integration for efficient game database access
+  - Type-safe access to dynamic game content
+  - Support for multiple languages and content versions
+
+- **Utilities:**
+  - Destiny 2 reset time calculations
+  - Helper methods for common operations
+
+> **Note:** BungieKit provides a strongly typed *interface* to the Bungie API (the structure of requests and responses), 
+> while the actual game content data (items, activities, etc.) comes from the Destiny 2 manifest database and is accessed 
+> through this type-safe interface.
 
 ## Requirements
 
