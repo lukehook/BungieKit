@@ -58,6 +58,17 @@ Before using BungieKit, you need to:
 2. Get your API key and OAuth credentials (if you plan to use authentication)
 3. Configure your OAuth redirect URL
 
+### Security Recommendations
+
+> **Warning**
+> 
+> API keys and OAuth credentials should be handled securely:
+> 
+> - **Never** store API keys, client IDs, or client secrets directly in your source code
+> - **Never** commit credentials to version control or include them in public repositories
+> 
+> Remember that your API key is tied to your Bungie.net application and rate limits. Compromised keys can lead to abuse and potential suspension of your application.
+
 ### Creating a Client
 
 ```swift
