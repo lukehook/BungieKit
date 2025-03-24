@@ -1,3 +1,6 @@
+> [!WARNING]
+> This package is currently a work in progress and you may find that not all functionality is working as expected.
+
 # BungieKit
 
 A Swift package for interacting with the Bungie.net API in Swift applications.
